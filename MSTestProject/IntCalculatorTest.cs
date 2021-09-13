@@ -7,15 +7,19 @@ namespace MSTestProject
     [TestClass]
     public class IntCalculatorTest
     {
-        [TestMethod]
-        public void AddValidNumber()
+        [DataTestMethod]
+        [DataRow(0, 1, 1)]
+        [DataRow(0, -1, -1)]
+        [DataRow(1, -1, 0)]
+        [DataRow(-1, 1, 0)]
+        [DataRow(0, int.MaxValue, int.MaxValue)]
+        [DataRow(0, int.MinValue, int.MinValue)]
+        public void AddValidNumber(int initialValue, int x, int expected)
         {
             // Arrange
             IIntCalculator c = new IntCalculator();
-
-            int x = 1234;
-            int oldResult = c.Result;
-            int expected = oldResult + x;
+            c.Add(initialValue);
+            Assert.AreEqual(initialValue, c.Result);
 
             // Act
             c.Add(x);
@@ -42,7 +46,7 @@ namespace MSTestProject
         {
             // Arrange
             IIntCalculator c = new IntCalculator();
-            
+
             c.Add(int.MinValue);
             int oldResult = c.Result;
 
