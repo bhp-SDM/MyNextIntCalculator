@@ -56,5 +56,57 @@ namespace MSTestProject
             Assert.AreEqual("Underflow while adding", ex.Message);
             Assert.AreEqual(oldResult, c.Result);
         }
+
+        [DataTestMethod]
+        [DataRow(0, 1, -1)]
+        [DataRow(0, -1, 1)]
+        [DataRow(1, 1, 0)]
+        [DataRow(-1, -1, 0)]
+        [DataRow(0, -int.MaxValue, int.MaxValue)]
+        [DataRow(-1, int.MaxValue, int.MinValue)]
+        public void SubValidNumber(int initialValue, int x, int expected)
+        {
+            // Arrange
+            IIntCalculator c = new IntCalculator();
+            c.Add(initialValue);
+            Assert.AreEqual(initialValue, c.Result);
+
+            // Act
+            c.Sub(x);
+
+            // Assert
+            Assert.AreEqual(expected, c.Result);
+        }
+
+        [TestMethod]
+        public void SubNumberWithUnderflowExpectExceptionToBeThrown()
+        {
+            IIntCalculator c = new IntCalculator();
+            c.Add(-int.MaxValue);
+            c.Add(-1);
+            int oldResult = c.Result;
+
+            var ex = Assert.ThrowsException<InvalidOperationException>(() => c.Sub(1));
+
+            Assert.AreEqual("Underflow while subtracting", ex.Message);
+            Assert.AreEqual(oldResult, c.Result);
+        }
+        [TestMethod]
+
+        public void SubNumberWithOverflowExpectExceptionToBeThrown()
+        {
+            // Arrange
+            IIntCalculator c = new IntCalculator();
+
+            c.Add(int.MaxValue);
+            int oldResult = c.Result;
+
+            // Act + Assert
+            var ex = Assert.ThrowsException<InvalidOperationException>(() => c.Sub(-1));
+
+            Assert.AreEqual("Overflow while subtracting", ex.Message);
+            Assert.AreEqual(oldResult, c.Result);
+        }
+
     }
 }

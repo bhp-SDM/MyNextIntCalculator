@@ -48,7 +48,11 @@ namespace MyNextIntCalculator
 
         public void Sub(int x)
         {
-            throw new NotImplementedException();
+            if (x > 0 && Result - x > Result)
+                throw new InvalidOperationException("Underflow while subtracting");
+            if (x < 0 && Result - x < Result)
+                throw new InvalidOperationException("Overflow while subtracting");
+            Result -= x;
         }
     }
 }
