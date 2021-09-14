@@ -8,7 +8,7 @@ namespace MyNextIntCalculator
 
         public IntCalculator()
         {
-            Result = 0;
+            Reset();
         }
 
         public void Add(int x)
@@ -28,22 +28,28 @@ namespace MyNextIntCalculator
 
         public void Div(int x)
         {
-            throw new NotImplementedException();
+            if (x == 0)
+                throw new InvalidOperationException("Division by zero is undefined");
+            Result /= x;
         }
 
         public void Mod(int x)
         {
-            throw new NotImplementedException();
+            Result %= x;
         }
 
         public void Mul(int x)
         {
-            throw new NotImplementedException();
+           if (Result > 0 && x > int.MaxValue / Result )
+                throw new InvalidOperationException("Overflow while multiplying");
+            if (Result < 0 && x < int.MinValue / Result)
+                throw new InvalidOperationException("Underflow while multiplying");
+            Result *= x;
         }
 
         public void Reset()
         {
-            throw new NotImplementedException();
+            Result = 0;
         }
 
         public void Sub(int x)
